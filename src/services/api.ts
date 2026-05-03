@@ -1,9 +1,25 @@
 import axios from 'axios';
 import { LogEntry } from '../types';
+import { apiBaseUrl } from '../config/api';
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: apiBaseUrl ? `${apiBaseUrl.replace(/\/$/, '')}/api` : '/api',
 });
+
+const normalizeArrayResponse = <T,>(value: unknown): T[] => {
+  if (Array.isArray(value)) {
+    return value as T[];
+  }
+
+  if (value && typeof value === 'object') {
+    const record = value as Record<string, unknown>;
+    if (Array.isArray(record.data)) return record.data as T[];
+    if (Array.isArray(record.items)) return record.items as T[];
+    if (Array.isArray(record.result)) return record.result as T[];
+  }
+
+  return [];
+};
 
 export interface IncidentDto {
   id: string;
@@ -23,7 +39,7 @@ export interface IncidentDto {
 export const fetchIncidents = async () => {
   try {
     const resp = await api.get<IncidentDto[]>('/incidents');
-    return resp.data ?? [];
+    return normalizeArrayResponse<IncidentDto>(resp.data);
   } catch {
     return [];
   }
@@ -33,7 +49,7 @@ export const fetchLogs = async (limit?: number) => {
   try {
     const params = limit != null ? { limit } : {};
     const resp = await api.get<LogEntry[]>('/logs', { params });
-    return resp.data ?? [];
+    return normalizeArrayResponse<LogEntry>(resp.data);
   } catch {
     return [];
   }
@@ -49,7 +65,7 @@ export interface HeatmapItem {
 export const fetchHeatmap = async () => {
   try {
     const resp = await api.get<HeatmapItem[]>('/stats/heatmap');
-    return resp.data ?? [];
+    return normalizeArrayResponse<HeatmapItem>(resp.data);
   } catch {
     return [];
   }
@@ -140,7 +156,7 @@ export interface ServiceRiskInsight {
 export const fetchTopFailingServices = async () => {
   try {
     const resp = await api.get<ServiceRiskInsight[]>('/services/top-failing');
-    return resp.data ?? [];
+    return normalizeArrayResponse<ServiceRiskInsight>(resp.data);
   } catch {
     return [];
   }
@@ -156,7 +172,7 @@ export interface ErrorTrendPoint {
 export const fetchErrorTrendPrediction = async () => {
   try {
     const resp = await api.get<ErrorTrendPoint[]>('/insights/prediction');
-    return resp.data ?? [];
+    return normalizeArrayResponse<ErrorTrendPoint>(resp.data);
   } catch {
     return [];
   }
