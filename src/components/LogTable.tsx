@@ -33,27 +33,27 @@ const getSeverityColor = (level: string | number | null | undefined) => {
 
   if (normalized === 'error' || normalized === 'critical') {
     return {
-      text: '#fecaca',
-      chipBg: 'rgba(127, 29, 29, 0.55)',
-      border: 'rgba(239, 68, 68, 0.45)',
-      cardGlow: '0 10px 30px rgba(220, 38, 38, 0.18)'
+      text: normalized === 'critical' ? '#fca5a5' : '#f87171',
+      chipBg: normalized === 'critical' ? '#450a0a' : '#7f1d1d',
+      border: normalized === 'critical' ? '#7f1d1d' : '#ef4444',
+      leftBorder: normalized === 'critical' ? '#f87171' : '#ef4444'
     };
   }
 
   if (normalized === 'warning') {
     return {
-      text: '#fde68a',
-      chipBg: 'rgba(120, 53, 15, 0.52)',
-      border: 'rgba(245, 158, 11, 0.45)',
-      cardGlow: '0 10px 30px rgba(217, 119, 6, 0.16)'
+      text: '#fbbf24',
+      chipBg: '#92400e',
+      border: '#f59e0b',
+      leftBorder: '#f59e0b'
     };
   }
 
   return {
-    text: '#93c5fd',
-    chipBg: 'rgba(30, 64, 175, 0.4)',
-    border: 'rgba(59, 130, 246, 0.4)',
-    cardGlow: '0 10px 30px rgba(37, 99, 235, 0.14)'
+    text: '#ffffff',
+    chipBg: '#1d4ed8',
+    border: '#1d4ed8',
+    leftBorder: '#1d4ed8'
   };
 };
 
@@ -71,11 +71,12 @@ const LogTable: React.FC<Props> = ({ logs, formatTimestamp }) => {
           <article
             key={log.id || idx}
             style={{
-              background: 'linear-gradient(140deg, rgba(30,41,59,0.86), rgba(15,23,42,0.96))',
-              border: `1px solid ${tone.border}`,
-              borderRadius: '16px',
-              padding: '1rem 1.05rem',
-              boxShadow: tone.cardGlow
+              background: '#1a1f2e',
+              border: '1px solid rgba(42, 49, 66, 0.9)',
+              borderLeft: `4px solid ${tone.leftBorder}`,
+              borderRadius: '8px',
+              padding: '12px 16px',
+              marginBottom: '8px'
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.8rem', marginBottom: '0.7rem' }}>

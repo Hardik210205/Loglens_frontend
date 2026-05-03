@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Search } from 'lucide-react';
 import { LogLevel } from '../types';
 
 interface LogFiltersProps {
@@ -29,9 +30,8 @@ const LogSearchFilters: React.FC<LogFiltersProps> = ({ onFiltersChange }) => {
   return (
     <div style={{
       padding: '1rem',
-      background: 'linear-gradient(140deg, rgba(30,41,59,0.84), rgba(15,23,42,0.97))',
+      background: '#1a1f2e',
       borderRadius: '16px',
-      boxShadow: '0 12px 30px rgba(2, 6, 23, 0.38)',
       border: '1px solid rgba(148,163,184,0.22)',
       marginBottom: '1.5rem'
     }}>
@@ -45,21 +45,24 @@ const LogSearchFilters: React.FC<LogFiltersProps> = ({ onFiltersChange }) => {
           <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold', color: '#bfdbfe' }}>
             Search Message
           </label>
-          <input
-            type="text"
-            placeholder="Search logs..."
-            value={filters.searchText}
-            onChange={(e) => handleChange('searchText', e.target.value)}
-            style={{
-              width: '100%',
-              padding: '0.5rem',
-              border: '1px solid rgba(125, 211, 252, 0.3)',
-              borderRadius: '8px',
-              fontFamily: 'JetBrains Mono, Consolas, Monaco, monospace',
-              backgroundColor: 'rgba(15, 23, 42, 0.85)',
-              color: '#e2e8f0'
-            }}
-          />
+          <div style={{ position: 'relative' }}>
+            <Search size={16} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+            <input
+              type="text"
+              placeholder="Search logs..."
+              value={filters.searchText}
+              onChange={(e) => handleChange('searchText', e.target.value)}
+              style={{
+                width: '100%',
+                padding: '0.75rem 0.75rem 0.75rem 38px',
+                border: '1px solid #2a3142',
+                borderRadius: '8px',
+                fontFamily: 'JetBrains Mono, Consolas, Monaco, monospace',
+                backgroundColor: '#1a1f2e',
+                color: '#e2e8f0'
+              }}
+            />
+          </div>
         </div>
 
         <div>
@@ -98,10 +101,10 @@ const LogSearchFilters: React.FC<LogFiltersProps> = ({ onFiltersChange }) => {
             onChange={(e) => handleChange('startDate', e.target.value)}
             style={{
               width: '100%',
-              padding: '0.5rem',
-              border: '1px solid rgba(125, 211, 252, 0.3)',
+              padding: '0.75rem',
+              border: '1px solid #2a3142',
               borderRadius: '8px',
-              backgroundColor: 'rgba(15, 23, 42, 0.85)',
+              backgroundColor: '#1a1f2e',
               color: '#e2e8f0'
             }}
           />
@@ -117,10 +120,10 @@ const LogSearchFilters: React.FC<LogFiltersProps> = ({ onFiltersChange }) => {
             onChange={(e) => handleChange('endDate', e.target.value)}
             style={{
               width: '100%',
-              padding: '0.5rem',
-              border: '1px solid rgba(125, 211, 252, 0.3)',
+              padding: '0.75rem',
+              border: '1px solid #2a3142',
               borderRadius: '8px',
-              backgroundColor: 'rgba(15, 23, 42, 0.85)',
+              backgroundColor: '#1a1f2e',
               color: '#e2e8f0'
             }}
           />

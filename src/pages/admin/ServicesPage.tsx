@@ -165,14 +165,18 @@ const ServicesPage: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {services.map((service) => (
-              <tr key={service.id}>
+            {services.map((service, index) => (
+              <tr key={service.id} style={{ background: rowBackgroundStyle(index) }}>
                 <td style={tdStyle}>{service.name}</td>
                 <td style={tdStyle}>{service.displayName}</td>
                 <td style={tdStyle}>{service.ownerEmail}</td>
                 <td style={tdStyle}>{service.keyPrefix || '-'}</td>
                 <td style={tdStyle}>{formatDate(service.createdAt)}</td>
-                <td style={tdStyle}>{statusLabel(service.isActive)}</td>
+                <td style={tdStyle}>
+                  <span style={service.isActive ? statusActiveStyle : statusInactiveStyle}>
+                    {statusLabel(service.isActive)}
+                  </span>
+                </td>
                 <td style={tdStyle}>
                   <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                     <button type="button" onClick={() => void handleReveal(service.id)} style={secondaryButtonStyle}>
@@ -253,9 +257,8 @@ const headerStyle: React.CSSProperties = {
 const panelStyle: React.CSSProperties = {
   padding: '1.1rem',
   borderRadius: '18px',
-  background: 'linear-gradient(140deg, rgba(30,41,59,0.86), rgba(15,23,42,0.97))',
+  background: '#1a1f2e',
   border: '1px solid rgba(148,163,184,0.2)',
-  boxShadow: '0 12px 34px rgba(2,6,23,0.42)',
   marginBottom: '1rem'
 };
 
@@ -288,9 +291,9 @@ const labelTextStyle: React.CSSProperties = {
 const inputStyle: React.CSSProperties = {
   width: '100%',
   padding: '0.9rem 1rem',
-  borderRadius: '12px',
-  border: '1px solid rgba(148,163,184,0.24)',
-  background: 'rgba(15,23,42,0.8)',
+  borderRadius: '8px',
+  border: '1px solid #2a3142',
+  background: '#1a1f2e',
   color: '#f8fafc',
   outline: 'none',
   fontSize: '1rem'
@@ -298,9 +301,9 @@ const inputStyle: React.CSSProperties = {
 
 const primaryButtonStyle: React.CSSProperties = {
   padding: '0.85rem 1rem',
-  borderRadius: '12px',
+  borderRadius: '8px',
   border: 'none',
-  background: 'linear-gradient(135deg, #0ea5e9, #2563eb)',
+  background: 'linear-gradient(135deg, #3b82f6, #6366f1)',
   color: 'white',
   fontWeight: 700,
   cursor: 'pointer'
@@ -308,18 +311,18 @@ const primaryButtonStyle: React.CSSProperties = {
 
 const secondaryButtonStyle: React.CSSProperties = {
   padding: '0.8rem 1rem',
-  borderRadius: '12px',
-  border: '1px solid rgba(148,163,184,0.25)',
-  background: 'rgba(30,41,59,0.96)',
-  color: '#e2e8f0',
+  borderRadius: '8px',
+  border: '1px solid #2a3142',
+  background: 'transparent',
+  color: '#cbd5e1',
   fontWeight: 600,
   cursor: 'pointer'
 };
 
 const dangerButtonStyle: React.CSSProperties = {
   ...secondaryButtonStyle,
-  borderColor: 'rgba(248,113,113,0.3)',
-  color: '#fecaca'
+  border: '1px solid #ef4444',
+  color: '#ef4444'
 };
 
 const tableStyle: React.CSSProperties = {
@@ -341,8 +344,10 @@ const tdStyle: React.CSSProperties = {
   padding: '0.9rem 0.7rem',
   borderBottom: '1px solid rgba(148,163,184,0.12)',
   color: '#e2e8f0',
-  verticalAlign: 'top'
+  verticalAlign: 'middle'
 };
+
+const rowBackgroundStyle = (index: number) => (index % 2 === 0 ? '#1a1f2e' : '#161b29');
 
 const modalBackdropStyle: React.CSSProperties = {
   position: 'fixed',
@@ -361,6 +366,28 @@ const modalCardStyle: React.CSSProperties = {
   background: 'linear-gradient(140deg, rgba(30,41,59,0.96), rgba(15,23,42,0.99))',
   border: '1px solid rgba(148,163,184,0.2)',
   boxShadow: '0 20px 60px rgba(2,6,23,0.6)'
+};
+
+const statusActiveStyle: React.CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  padding: '0.2rem 0.6rem',
+  borderRadius: 999,
+  background: '#166534',
+  color: '#86efac',
+  fontSize: '0.78rem',
+  fontWeight: 700
+};
+
+const statusInactiveStyle: React.CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  padding: '0.2rem 0.6rem',
+  borderRadius: 999,
+  background: '#374151',
+  color: '#9ca3af',
+  fontSize: '0.78rem',
+  fontWeight: 700
 };
 
 export default ServicesPage;

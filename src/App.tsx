@@ -1,9 +1,10 @@
 import React, { Suspense, useEffect, useMemo, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { createLogHubConnection } from './services/signalr';
 import { HubConnectionState } from '@microsoft/signalr';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import Sidebar from './components/Sidebar';
 
 const LiveLogs = React.lazy(() => import('./pages/LiveLogs'));
 const IncidentExplorer = React.lazy(() => import('./pages/IncidentExplorer'));
@@ -21,7 +22,11 @@ interface RiskToast {
 
 const AppShell: React.FC = () => {
   const auth = useAuth();
+  const location = useLocation();
+  const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [toasts, setToasts] = useState<RiskToast[]>([]);
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
+  const showSidebar = auth.isAuthenticated && !isAuthPage;
 
   useEffect(() => {
     const connection = createLogHubConnection();
@@ -83,48 +88,30 @@ const AppShell: React.FC = () => {
     </div>
   ), [toasts]);
 
+  const mainMarginLeft = showSidebar ? (sidebarExpanded ? 240 : 64) : 0;
+
   return (
     <>
       {toastContainer}
-      <nav className="navbar">
-        <div style={{ fontSize: '1.2rem', fontWeight: 700, marginRight: '2rem', letterSpacing: '0.06em' }}>LogLens</div>
-        {auth.isAuthenticated ? (
-          <>
-            <Link to="/">Live Logs</Link>
-            <Link to="/incidents">Incidents</Link>
-            <Link to="/dashboard">Dashboard</Link>
-            {auth.isAdmin() && <Link to="/admin/services">Services</Link>}
-            {auth.isAdmin() && <Link to="/admin/users">Users</Link>}
-          </>
-        ) : (
-          <Link to="/login">Sign In</Link>
-        )}
-        <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-          {auth.user && (
-            <div style={{ color: '#cbd5e1', fontSize: '0.9rem' }}>
-              {auth.user.email}
-            </div>
-          )}
-          {auth.isAuthenticated && (
-            <button
-              type="button"
-              onClick={auth.logout}
-              style={{
-                border: '1px solid rgba(148,163,184,0.25)',
-                background: 'rgba(30,41,59,0.96)',
-                color: '#e2e8f0',
-                borderRadius: '999px',
-                padding: '0.45rem 0.9rem',
-                cursor: 'pointer',
-                fontWeight: 600
-              }}
-            >
-              Logout
-            </button>
-          )}
-        </div>
-      </nav>
-      <div className="container">
+      {showSidebar && (
+        <Sidebar
+          expanded={sidebarExpanded}
+          onToggle={() => setSidebarExpanded((prev) => !prev)}
+          onLogout={auth.logout}
+          userEmail={auth.user?.email ?? null}
+          userRole={auth.user?.role ?? null}
+          isAdmin={auth.isAdmin()}
+        />
+      )}
+      <main
+        style={{
+          minHeight: '100vh',
+          marginLeft: mainMarginLeft,
+          transition: 'margin-left 300ms ease',
+          background: '#0f1117',
+          padding: showSidebar ? 32 : 0
+        }}
+      >
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
@@ -144,7 +131,7 @@ const AppShell: React.FC = () => {
             <Route path="*" element={<Navigate to={auth.isAuthenticated ? '/dashboard' : '/login'} replace />} />
           </Routes>
         </Suspense>
-      </div>
+      </main>
     </>
   );
 };

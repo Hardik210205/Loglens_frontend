@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Lock, Mail } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 const LoginPage: React.FC = () => {
@@ -43,20 +44,12 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div style={{ minHeight: 'calc(100vh - 120px)', display: 'grid', placeItems: 'center' }}>
-      <div style={{
-        width: 'min(420px, 100%)',
-        padding: '2rem',
-        borderRadius: '22px',
-        background: 'linear-gradient(150deg, rgba(30,41,59,0.96), rgba(15,23,42,0.98))',
-        border: '1px solid rgba(148,163,184,0.18)',
-        boxShadow: '0 24px 60px rgba(2,6,23,0.48)'
-      }}>
+    <div className="login-page">
+      <div className="login-card">
         <div style={{ marginBottom: '1.5rem' }}>
-          <div style={{ color: '#7dd3fc', fontSize: '0.82rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase' }}>
-            LogLens Access
-          </div>
-          <h1 style={{ margin: '0.35rem 0 0', color: '#f8fafc', fontSize: '2rem' }}>Sign In</h1>
+          <div className="login-brand">LogLens</div>
+          <div className="login-subtitle">Log Intelligence Platform</div>
+          <h1 style={{ margin: '0.4rem 0 0', color: '#f8fafc', fontSize: '2rem' }}>Sign In</h1>
           <p style={{ margin: '0.5rem 0 0', color: '#94a3b8', lineHeight: 1.5 }}>
             Use your LogLens account to access dashboards and admin tools.
           </p>
@@ -71,26 +64,32 @@ const LoginPage: React.FC = () => {
         <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '1rem' }}>
           <label style={{ display: 'grid', gap: '0.45rem' }}>
             <span style={{ color: '#cbd5e1', fontSize: '0.92rem' }}>Email</span>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              autoComplete="email"
-              style={inputStyle}
-            />
+            <div className="login-input-wrap">
+              <Mail size={16} className="login-input-icon" />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                autoComplete="email"
+                style={inputStyle}
+              />
+            </div>
           </label>
 
           <label style={{ display: 'grid', gap: '0.45rem' }}>
             <span style={{ color: '#cbd5e1', fontSize: '0.92rem' }}>Password</span>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              autoComplete="current-password"
-              style={inputStyle}
-            />
+            <div className="login-input-wrap">
+              <Lock size={16} className="login-input-icon" />
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                autoComplete="current-password"
+                style={inputStyle}
+              />
+            </div>
           </label>
 
           {error && (
@@ -102,8 +101,8 @@ const LoginPage: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
+            className="login-button"
             style={{
-              ...buttonStyle,
               opacity: loading ? 0.8 : 1,
               cursor: loading ? 'wait' : 'pointer'
             }}
@@ -122,23 +121,12 @@ const LoginPage: React.FC = () => {
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
-  padding: '0.9rem 1rem',
-  borderRadius: '12px',
-  border: '1px solid rgba(148,163,184,0.24)',
-  background: 'rgba(15,23,42,0.8)',
+  padding: '12px 12px 12px 40px',
+  borderRadius: '8px',
+  border: '1px solid #2a3142',
+  background: 'rgba(255,255,255,0.05)',
   color: '#f8fafc',
   outline: 'none',
-  fontSize: '1rem'
-};
-
-const buttonStyle: React.CSSProperties = {
-  marginTop: '0.2rem',
-  padding: '0.95rem 1rem',
-  borderRadius: '12px',
-  border: 'none',
-  background: 'linear-gradient(135deg, #0ea5e9, #2563eb)',
-  color: 'white',
-  fontWeight: 700,
   fontSize: '1rem'
 };
 

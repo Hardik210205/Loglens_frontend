@@ -32,20 +32,17 @@ const SystemRiskPanel: React.FC = () => {
 
   const score = risk?.score ?? 0;
   const scoreColor =
-    score <= 40
+    score === 0
       ? '#22c55e'
-      : score <= 70
-        ? '#facc15'
-        : score <= 90
-          ? '#f97316'
-          : '#ef4444';
+      : score <= 50
+        ? '#f59e0b'
+        : '#ef4444';
 
   return (
     <div style={{
       padding: '1rem',
-      background: 'linear-gradient(145deg, rgba(30,41,59,0.85), rgba(15,23,42,0.96))',
+      background: '#1a1f2e',
       borderRadius: '14px',
-      boxShadow: '0 10px 28px rgba(2,6,23,0.38)',
       marginBottom: '1.25rem',
       borderLeft: `6px solid ${scoreColor}`,
       border: '1px solid rgba(148,163,184,0.2)'

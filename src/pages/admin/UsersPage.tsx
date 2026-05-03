@@ -109,7 +109,7 @@ const UsersPage: React.FC = () => {
             {users.map((user) => {
               const isSelf = user.id === currentUserId;
               return (
-                <tr key={user.id}>
+                <tr key={user.id} style={{ background: rowBackgroundStyle(users.indexOf(user)) }}>
                   <td style={tdStyle}>{user.email}</td>
                   <td style={tdStyle}>
                     <select
@@ -123,7 +123,11 @@ const UsersPage: React.FC = () => {
                     </select>
                   </td>
                   <td style={tdStyle}>{formatDate(user.createdAt)}</td>
-                  <td style={tdStyle}>{user.isActive ? 'Active' : 'Inactive'}</td>
+                  <td style={tdStyle}>
+                    <span style={user.isActive ? statusActiveStyle : statusInactiveStyle}>
+                      {user.isActive ? 'Active' : 'Inactive'}
+                    </span>
+                  </td>
                   <td style={tdStyle}>
                     <button
                       type="button"
@@ -214,9 +218,8 @@ const headerStyle: React.CSSProperties = {
 const panelStyle: React.CSSProperties = {
   padding: '1.1rem',
   borderRadius: '18px',
-  background: 'linear-gradient(140deg, rgba(30,41,59,0.86), rgba(15,23,42,0.97))',
+  background: '#1a1f2e',
   border: '1px solid rgba(148,163,184,0.2)',
-  boxShadow: '0 12px 34px rgba(2,6,23,0.42)',
   marginBottom: '1rem'
 };
 
@@ -249,9 +252,9 @@ const labelTextStyle: React.CSSProperties = {
 const inputStyle: React.CSSProperties = {
   width: '100%',
   padding: '0.9rem 1rem',
-  borderRadius: '12px',
-  border: '1px solid rgba(148,163,184,0.24)',
-  background: 'rgba(15,23,42,0.8)',
+  borderRadius: '8px',
+  border: '1px solid #2a3142',
+  background: '#1a1f2e',
   color: '#f8fafc',
   outline: 'none',
   fontSize: '1rem'
@@ -263,9 +266,9 @@ const selectStyle: React.CSSProperties = {
 
 const primaryButtonStyle: React.CSSProperties = {
   padding: '0.85rem 1rem',
-  borderRadius: '12px',
+  borderRadius: '8px',
   border: 'none',
-  background: 'linear-gradient(135deg, #0ea5e9, #2563eb)',
+  background: 'linear-gradient(135deg, #3b82f6, #6366f1)',
   color: 'white',
   fontWeight: 700,
   cursor: 'pointer'
@@ -273,23 +276,24 @@ const primaryButtonStyle: React.CSSProperties = {
 
 const secondaryButtonStyle: React.CSSProperties = {
   padding: '0.8rem 1rem',
-  borderRadius: '12px',
-  border: '1px solid rgba(148,163,184,0.25)',
-  background: 'rgba(30,41,59,0.96)',
-  color: '#e2e8f0',
+  borderRadius: '8px',
+  border: '1px solid #2a3142',
+  background: 'transparent',
+  color: '#cbd5e1',
   fontWeight: 600,
   cursor: 'pointer'
 };
 
 const dangerButtonStyle: React.CSSProperties = {
   ...secondaryButtonStyle,
-  borderColor: 'rgba(248,113,113,0.3)',
-  color: '#fecaca'
+  border: '1px solid #ef4444',
+  color: '#ef4444'
 };
 
 const disabledButtonStyle: React.CSSProperties = {
   ...secondaryButtonStyle,
-  opacity: 0.55,
+  borderColor: '#2a3142',
+  color: '#94a3b8',
   cursor: 'not-allowed'
 };
 
@@ -303,7 +307,7 @@ const thStyle: React.CSSProperties = {
   padding: '0.85rem 0.7rem',
   color: '#94a3b8',
   borderBottom: '1px solid rgba(148,163,184,0.18)',
-  fontSize: '0.82rem',
+  fontSize: '0.78rem',
   textTransform: 'uppercase',
   letterSpacing: '0.08em'
 };
@@ -312,7 +316,31 @@ const tdStyle: React.CSSProperties = {
   padding: '0.9rem 0.7rem',
   borderBottom: '1px solid rgba(148,163,184,0.12)',
   color: '#e2e8f0',
-  verticalAlign: 'top'
+  verticalAlign: 'middle'
+};
+
+const rowBackgroundStyle = (index: number) => (index % 2 === 0 ? '#1a1f2e' : '#161b29');
+
+const statusActiveStyle: React.CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  padding: '0.2rem 0.6rem',
+  borderRadius: 999,
+  background: '#166534',
+  color: '#86efac',
+  fontSize: '0.78rem',
+  fontWeight: 700
+};
+
+const statusInactiveStyle: React.CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  padding: '0.2rem 0.6rem',
+  borderRadius: 999,
+  background: '#374151',
+  color: '#9ca3af',
+  fontSize: '0.78rem',
+  fontWeight: 700
 };
 
 export default UsersPage;
