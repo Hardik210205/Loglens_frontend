@@ -74,8 +74,8 @@ export function getCurrentUser(): { id: string; email: string; role: string } | 
     const payloadJson = decodeBase64Url(parts[1]);
     const payload = JSON.parse(payloadJson) as JwtPayload;
     const MS_ROLE_CLAIM = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
-const rawRole = (payload as Record<string, unknown>)[MS_ROLE_CLAIM] ?? payload.role;
-const roleValue = Array.isArray(rawRole) ? rawRole[0] : rawRole as string | undefined;
+    const rawRole = (payload as Record<string, unknown>)[MS_ROLE_CLAIM] ?? payload.role;
+    const roleValue = Array.isArray(rawRole) ? rawRole[0] : rawRole as string | undefined;
 
     if (!payload.sub || !payload.email || !roleValue) {
       return null;
@@ -84,7 +84,8 @@ const roleValue = Array.isArray(rawRole) ? rawRole[0] : rawRole as string | unde
     return {
       id: payload.sub,
       email: payload.email,
-      role: roleValue
+      role: roleValue,
+      tenantId: (payload as Record<string, unknown>).TenantId as string | undefined
     };
   } catch {
     return null;

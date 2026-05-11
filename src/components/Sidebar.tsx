@@ -18,6 +18,7 @@ type SidebarProps = {
   userEmail?: string | null;
   userRole?: string | null;
   isAdmin: boolean;
+  tenantId?: string | null;
 };
 
 type NavItem = {
@@ -27,7 +28,7 @@ type NavItem = {
   adminOnly?: boolean;
 };
 
-const Sidebar: React.FC<SidebarProps> = ({ expanded, onToggle, onLogout, userEmail, userRole, isAdmin }) => {
+const Sidebar: React.FC<SidebarProps> = ({ expanded, onToggle, onLogout, userEmail, userRole, isAdmin, tenantId }) => {
   const panelRef = useRef<HTMLDivElement | null>(null);
   const avatarButtonRef = useRef<HTMLButtonElement | null>(null);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -356,6 +357,13 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, onToggle, onLogout, userEma
               >
                 {userRole ?? 'Viewer'}
               </div>
+
+              {tenantId && (
+                <div style={{ fontSize: 11, color: '#64748b', marginBottom: 10, wordBreak: 'break-all' }}>
+                  <strong style={{ color: '#94a3b8' }}>Org ID:</strong><br />
+                  {tenantId}
+                </div>
+              )}
 
               <div style={{ height: 1, background: '#2a3142', margin: '10px 0' }} />
 

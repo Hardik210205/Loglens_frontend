@@ -6,6 +6,14 @@ const api = axios.create({
   baseURL: apiBaseUrl ? `${apiBaseUrl.replace(/\/$/, '')}/api` : '/api',
 });
 
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('ll_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 const normalizeArrayResponse = <T,>(value: unknown): T[] => {
   if (Array.isArray(value)) {
     return value as T[];

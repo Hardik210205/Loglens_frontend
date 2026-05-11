@@ -85,3 +85,7 @@ export async function updateRole(id: string, role: 'Admin' | 'Viewer'): Promise<
 export async function deactivateUser(id: string): Promise<void> {
   await axios.patch(API.deactivateUser(id), undefined, { headers: authHeaders() });
 }
+
+export async function deleteUser(id: string): Promise<void> {
+  await axios.delete(`${API.users}/${id}`, { headers: authHeaders() });
+}

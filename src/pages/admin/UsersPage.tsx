@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { register } from '../../services/authApi';
-import { deactivateUser, getUsers, updateRole, type UserDto } from '../../services/adminApi';
+import { deactivateUser, deleteUser, getUsers, updateRole, type UserDto } from '../../services/adminApi';
 
 const UsersPage: React.FC = () => {
   const auth = useAuth();
@@ -84,6 +84,24 @@ const UsersPage: React.FC = () => {
     }
   };
 
+  const handleDelete = async (userId: string) => {
+    if (userId === currentUserId) {
+      return;
+    }
+
+    if (!window.confirm('Are you sure you want to PERMANENTLY delete this user? This cannot be undone.')) {
+      return;
+    }
+
+    setError(null);
+    try {
+      await deleteUser(userId);
+      await loadUsers();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete user');
+    }
+  };
+
   const content = useMemo(() => {
     if (loading) {
       return <div style={{ color: '#94a3b8' }}>Loading users...</div>;
@@ -129,14 +147,25 @@ const UsersPage: React.FC = () => {
                     </span>
                   </td>
                   <td style={tdStyle}>
-                    <button
-                      type="button"
-                      disabled={isSelf}
-                      onClick={() => void handleDeactivate(user.id)}
-                      style={isSelf ? disabledButtonStyle : dangerButtonStyle}
-                    >
-                      {isSelf ? 'Current User' : 'Deactivate'}
-                    </button>
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <button
+                        type="button"
+                        disabled={isSelf}
+                        onClick={() => void handleDeactivate(user.id)}
+                        style={isSelf ? disabledButtonStyle : secondaryButtonStyle}
+                      >
+                        {isSelf ? 'Current User' : 'Deactivate'}
+                      </button>
+                      {!isSelf && (
+                        <button
+                          type="button"
+                          onClick={() => void handleDelete(user.id)}
+                          style={dangerButtonStyle}
+                        >
+                          Delete
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               );

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { createService, deleteService, getServices, revealKey, rotateKey, type ApiKeyResult, type CreateServiceResult, type ServiceDto } from '../../services/adminApi';
+import { createService, deleteService, getServices, revealKey, type ApiKeyResult, type CreateServiceResult, type ServiceDto } from '../../services/adminApi';
 import { useAuth } from '../../contexts/AuthContext';
 
 function formatDate(value: string) {
@@ -106,17 +106,6 @@ const ServicesPage: React.FC = () => {
     }
   };
 
-  const handleRotate = async (serviceId: string) => {
-    setError(null);
-    try {
-      const result = await rotateKey(serviceId);
-      setApiKeyModal(result);
-      await loadServices();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to rotate key');
-    }
-  };
-
   const handleReveal = async (serviceId: string) => {
     setError(null);
     try {
@@ -128,7 +117,7 @@ const ServicesPage: React.FC = () => {
   };
 
   const handleDelete = async (serviceId: string) => {
-    if (!window.confirm('Delete this service? This will deactivate its API keys.')) {
+    if (!window.confirm('Permanently delete this service and all its API keys? This action cannot be undone.')) {
       return;
     }
 
@@ -180,10 +169,7 @@ const ServicesPage: React.FC = () => {
                 <td style={tdStyle}>
                   <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                     <button type="button" onClick={() => void handleReveal(service.id)} style={secondaryButtonStyle}>
-                      Reveal Key
-                    </button>
-                    <button type="button" onClick={() => void handleRotate(service.id)} style={secondaryButtonStyle}>
-                      Rotate Key
+                      View Key
                     </button>
                     <button type="button" onClick={() => void handleDelete(service.id)} style={dangerButtonStyle}>
                       Delete

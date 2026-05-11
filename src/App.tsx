@@ -101,6 +101,7 @@ const AppShell: React.FC = () => {
           userEmail={auth.user?.email ?? null}
           userRole={auth.user?.role ?? null}
           isAdmin={auth.isAdmin()}
+          tenantId={auth.user?.tenantId ?? null}
         />
       )}
       <main
