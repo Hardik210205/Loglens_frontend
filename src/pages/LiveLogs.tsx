@@ -28,10 +28,26 @@ const LiveLogs: React.FC = () => {
 
   useEffect(() => {
     let mounted = true;
+
+    const mergeLogs = (incoming: LogEntry[], current: LogEntry[]) => {
+      const byKey = new Map<string, LogEntry>();
+
+      for (const log of [...incoming, ...current]) {
+        const key = `${log.timestamp}|${log.level}|${log.message}`;
+        if (!byKey.has(key)) {
+          byKey.set(key, log);
+        }
+      }
+
+      return Array.from(byKey.values()).slice(0, 100);
+    };
+
     const loadInitial = async () => {
       try {
         const existing = await fetchLogs(100);
-        if (mounted) setLogs(existing as LogEntry[]);
+        if (mounted) {
+          setLogs((prev) => mergeLogs(existing as LogEntry[], prev));
+        }
       } catch (e) {
         if (mounted) setError(prev => prev || (e instanceof Error ? e.message : 'Failed to load logs'));
       }
